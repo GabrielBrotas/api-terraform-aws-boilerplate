@@ -4,12 +4,12 @@ module "vpc" {
 
 	# we can get the attributes of the module from the module source on https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
 	name = "${var.environment}-vpc"
-	cidr = "10.10.0.0/16"
+	cidr = var.vpc_cidr
 	enable_dns_hostnames = true
 	enable_dns_support = true
 
 	azs             = ["us-east-1a", "us-east-1b"]
-	public_subnets  = ["10.10.0.0/24", "10.10.1.0/24"]
+	public_subnets  = var.vpc_public_subnets_cidr
 
   	# private_subnets = ["10.10.2.0/24", "10.10.3.0/24"]
 	# enable_nat_gateway = true

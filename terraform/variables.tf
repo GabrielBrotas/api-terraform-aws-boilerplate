@@ -9,3 +9,19 @@ variable "environment" {
     type = string
     default = "dev"
 }
+
+variable "public_subnets" {
+    description = "List of instance types to launch"
+    type = list
+    default = ["t2.micro", "t2.small", "t2.medium"]
+}
+
+variable "vpc_cidr" {
+    description = "CIDR block for the VPC"
+    type = string
+}
+
+variable "vpc_public_subnets_cidr" {
+    description = "CIDR block for the VPC"
+    type = list
+}

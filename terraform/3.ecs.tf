@@ -87,6 +87,12 @@ resource "aws_ecs_task_definition" "ecs_api_task_definition" {
                     "containerPort" = 4000
                 }
             ],
+            "environment" = [
+                {
+                    "name" = "ENVIRONMENT",
+                    "value" = "${var.environment}",
+                }
+            ]
         }
     ])
 }
