@@ -32,11 +32,9 @@ jobs:
         run: cd terraform && terraform init
         
       - name: Terraform Validate
-        id: validate
         run: cd terraform && terraform validate -no-color
         
       - name: Main Branch -> Terraform Plan
-        id: plan
         if: ${{ github.ref == 'refs/heads/main' }}
         run: cd terraform && terraform plan -var-file=./prod.tfvars
         
@@ -56,7 +54,6 @@ jobs:
           aws ecs update-service --cluster prod-ecs-boilerplate-cluster --service prod-ecs-api-service --task-definition prod-ecs-api-task-definition --force-new-deployment
           
       - name: Dev Branch -> Terraform Plan
-        id: plan
         if: ${{ github.ref == 'refs/heads/dev' }}
         run: cd terraform && terraform plan -var-file=./dev.tfvars
         
