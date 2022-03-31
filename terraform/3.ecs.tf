@@ -47,7 +47,6 @@ data "aws_iam_policy_document" "api_policy_document" {
     statement {
         actions = [ 
             "ecr:GetAuthorizationToken",
-            "ecr:GetAuthorizationToken",
             "ecr:BatchCheckLayerAvailability",
             "ecr:GetDownloadUrlForLayer",
             "ecr:BatchGetImage",
