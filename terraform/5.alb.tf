@@ -1,6 +1,6 @@
 
 resource "aws_lb" "api-application-load-balancer" {
-    name = "api-application-load-balancer"
+    name = "${var.environment}-api-alb"
     internal = false
     security_groups = [aws_security_group.api_alb_sg.id]
     subnets = module.vpc.public_subnets
@@ -38,7 +38,7 @@ resource "aws_lb_listener" "api_alb_listener" {
 }
 
 resource "aws_security_group" "api_alb_sg" {
-    name = "api-application-load-balancer-sg"
+    name = "${var.environment}-api-alb-sg"
     description = "Allow traffic from internet"
     vpc_id = module.vpc.vpc_id
 
@@ -71,7 +71,7 @@ resource "aws_security_group" "api_alb_sg" {
     ]
 
     tags = {
-        Name = "api-application-load-balancer-sg"
+        Name = "${var.environment}-api-alb-sg"
         Environment = var.environment
     }
 }

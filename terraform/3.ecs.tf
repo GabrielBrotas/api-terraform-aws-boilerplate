@@ -83,7 +83,7 @@ resource "aws_ecs_task_definition" "ecs_api_task_definition" {
 }
 
 resource "aws_security_group" "api_app_sg" {
-    name = "api-app-sg"
+    name = "${var.environment}-api-app-sg"
     description = "Allow traffic from alb to api"
     vpc_id = module.vpc.vpc_id
 
@@ -116,13 +116,13 @@ resource "aws_security_group" "api_app_sg" {
     ]
 
     tags = {
-        Name = "api-app-sg"
+        Name = "${var.environment}-api-app-sg"
         Environment = "${var.environment}"
     }
 }
 
 resource "aws_ecs_service" "api_ecs_service" {
-    name = "api_svc"
+    name = "${var.environment}-ecs-api-service"
     cluster = aws_ecs_cluster.ecs_cluster.id
     task_definition = aws_ecs_task_definition.ecs_api_task_definition.arn
     desired_count = 2
