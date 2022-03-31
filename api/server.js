@@ -8,7 +8,7 @@ app.get('/health-check', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    return res.status(200).json({ success: true, version: '1.1.0' })
+    return res.status(200).json({ success: true, version: '1.1.1' })
 })
 
 const PORT = 4000;

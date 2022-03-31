@@ -47,4 +47,4 @@ jobs:
           docker tag prod-api-boilerplate-repository:latest 778568866635.dkr.ecr.us-east-1.amazonaws.com/prod-api-boilerplate-repository:latest
           docker push 778568866635.dkr.ecr.us-east-1.amazonaws.com/prod-api-boilerplate-repository:latest
 
-          aws ecs update-service --cluster prod-ecs-boilerplate-cluster --service prod-ecs-api-service --task-definition prod-ecs-api-task-definition --force-new-deployment > /prod/null
+          aws ecs update-service --cluster prod-ecs-boilerplate-cluster --service prod-ecs-api-service --task-definition prod-ecs-api-task-definition --force-new-deployment
