@@ -10,7 +10,11 @@ app.get('/health-check', (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    return res.status(200).json({ success: true, version: '1.2.1', environment: process.env.ENVIRONMENT })
+    return res.status(200).json({ 
+        success: true, 
+        version: '1.2.2', 
+        environment: process.env.ENVIRONMENT
+    })
 })
 
 const PORT = 4000;
