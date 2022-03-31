@@ -2,10 +2,13 @@
    In order to simplify the api development I created this generic boilerplate to improve the first steps of building a containerized api.
    In this boilerplate you'll find:
    - Github Actions to create the CI/CD pipeline;
-   - Terraform, Infrastructure as Code to create the aws environment
-   - Docker to create api image
+   - Terraform, Infrastructure as Code to create AWS environment resources;
+   - Docker to create api image;
    
 ## Infrastructure
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/63565773/161129190-a4911398-2cb2-49fe-9b64-24f79e4c5d9a.png" width="500px" />
+</p>
    - 1 VPC, 2 Public Subnets, 2 Private Subnets, 2 Database Subnets, 1 IGW, 1 NAT;
    - 1 ECS Cluster, 1 Task Definition, 1 Service with 2 Desired Tasks;
    - 1 ECR;
