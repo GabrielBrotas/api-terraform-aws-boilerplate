@@ -10,7 +10,8 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 
 resource "aws_iam_role" "ecs_task_role" {
     name = "${var.environment}-ecs-api-role"
-    
+    path = "/"
+
     assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -39,11 +40,20 @@ data "aws_iam_policy_document" "api_policy_document" {
     statement {
       sid = "AllowECRPull"
       actions = [ "ecr:*" ]
-      resources = [ "${aws_ecr_repository.api_boilerplate_repository.arn}" ]
+    #   resources = [ "${aws_ecr_repository.api_boilerplate_repository.arn}" ]
+      resources = [ "*" ]
     }
 
     statement {
-        actions = [ "ecr:GetAuthorizationToken" ]
+        actions = [ 
+            "ecr:GetAuthorizationToken",
+            "ecr:GetAuthorizationToken",
+            "ecr:BatchCheckLayerAvailability",
+            "ecr:GetDownloadUrlForLayer",
+            "ecr:BatchGetImage",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents",
+        ]
         resources = [ "*" ]
     }
 
@@ -56,8 +66,8 @@ data "aws_iam_policy_document" "api_policy_document" {
 
 resource "aws_iam_policy_attachment" "ecs_api_policy_attachement" {
     name = "${var.environment}-ecs-api-policy-attachement"
-    roles = ["${aws_iam_role.ecs_task_role.name}"]
-    policy_arn = "${aws_iam_policy.ecs_api_policy.arn}"
+    roles = [aws_iam_role.ecs_task_role.name]
+    policy_arn = aws_iam_policy.ecs_api_policy.arn
 }
 
 resource "aws_ecs_task_definition" "ecs_api_task_definition" {
@@ -135,6 +145,7 @@ resource "aws_ecs_service" "api_ecs_service" {
     network_configuration {
         subnets = module.vpc.public_subnets
         security_groups = [aws_security_group.api_app_sg.id]
+        assign_public_ip = true
     }
 
     load_balancer {
