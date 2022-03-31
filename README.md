@@ -21,14 +21,22 @@
  **3- Now you just need to create a new commit :)**
 
 
+## Clean up
+```
+    cd scripts
+    chmod +x ./*.sh
+    ./cleanup.sh
+```
+
 ## Features
-- [ ] IaC -> 1 VPC, 2 Public Subnets, 2 Private Subnets, 2 Database Subnets, 1 IGW, 1 NAT
+- [X] IaC -> 1 VPC, 2 Public Subnets, 2 Private Subnets, 2 Database Subnets, 1 IGW, 1 NAT
 - [X] IaC -> 1 ECS Cluster, 1 Task Definition, 1 Service with 2 Desired Tasks
 - [X] IaC -> 1 ECR
 - [X] IaC -> 1 ALB, 1 Target Group pointing to service
 - [X] CI/CD -> Update the whole infrastructure when new commit to branch main/dev 
 - [X] CI/CD -> Separate dev & prod environment
 - [X] CI/CD -> Update ECR image, Task Definition and Service
-- [ ] Network diagram
+- [X] Network diagram
 
 ## Next Steps
+- [ ] Auto release tags
