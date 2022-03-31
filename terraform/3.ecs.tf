@@ -40,8 +40,7 @@ data "aws_iam_policy_document" "api_policy_document" {
     statement {
       sid = "AllowECRPull"
       actions = [ "ecr:*" ]
-    #   resources = [ "${aws_ecr_repository.api_boilerplate_repository.arn}" ]
-      resources = [ "*" ]
+      resources = [ "${aws_ecr_repository.api_boilerplate_repository.arn}" ]
     }
 
     statement {
@@ -148,9 +147,9 @@ resource "aws_ecs_service" "api_ecs_service" {
     scheduling_strategy = "REPLICA"
 
     network_configuration {
-        subnets = module.vpc.public_subnets
+        subnets = module.vpc.private_subnets
         security_groups = [aws_security_group.api_app_sg.id]
-        assign_public_ip = true
+        # assign_public_ip = true
     }
 
     load_balancer {

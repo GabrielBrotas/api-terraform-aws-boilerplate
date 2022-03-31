@@ -22,6 +22,16 @@ variable "vpc_cidr" {
 }
 
 variable "vpc_public_subnets_cidr" {
-    description = "CIDR block for the VPC"
+    description = "CIDR block for the Public Subnets"
+    type = list
+}
+
+variable "vpc_private_subnets_cidr" {
+    description = "CIDR block for the Private Subnets"
+    type = list
+}
+
+variable "vpc_database_subnets_cidr" {
+    description = "CIDR block for the Database Subnets"
     type = list
 }
