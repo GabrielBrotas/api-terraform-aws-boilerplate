@@ -35,15 +35,12 @@ jobs:
         run: cd terraform && terraform validate -no-color
         
       - name: Main Branch -> Terraform Plan
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: cd terraform && terraform plan -var-file=./prod.tfvars
         
       - name: Main Branch -> Terraform Apply
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: cd terraform && terraform apply -auto-approve -var-file=./prod.tfvars
 
       - name: Main Branch -> Update Repository Image and Service
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           cd api
           aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 778568866635.dkr.ecr.us-east-1.amazonaws.com
@@ -52,22 +49,23 @@ jobs:
           docker push 778568866635.dkr.ecr.us-east-1.amazonaws.com/prod-api-boilerplate-repository:latest
 
           aws ecs update-service --cluster prod-ecs-boilerplate-cluster --service prod-ecs-api-service --task-definition prod-ecs-api-task-definition --force-new-deployment
-          
-      - name: Dev Branch -> Terraform Plan
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run: cd terraform && terraform plan -var-file=./dev.tfvars
+
+        # TODO: separate dev pipeline to another file
+      # - name: Dev Branch -> Terraform Plan
+      #   if: ${{ github.ref == 'refs/heads/dev' }}
+      #   run: cd terraform && terraform plan -var-file=./dev.tfvars
         
-      - name: Dev Branch -> Terraform Apply
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run: cd terraform && terraform apply -auto-approve -var-file=./dev.tfvars
+      # - name: Dev Branch -> Terraform Apply
+      #   if: ${{ github.ref == 'refs/heads/dev' }}
+      #   run: cd terraform && terraform apply -auto-approve -var-file=./dev.tfvars
 
-      - name: Dev Branch -> Update Repository Image and Service
-        if: ${{ github.ref == 'refs/heads/dev' }}
-        run: |
-          cd api
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 778568866635.dkr.ecr.us-east-1.amazonaws.com
-          docker build -t dev-api-boilerplate-repository .
-          docker tag dev-api-boilerplate-repository:latest 778568866635.dkr.ecr.us-east-1.amazonaws.com/dev-api-boilerplate-repository:latest
-          docker push 778568866635.dkr.ecr.us-east-1.amazonaws.com/dev-api-boilerplate-repository:latest
+      # - name: Dev Branch -> Update Repository Image and Service
+      #   if: ${{ github.ref == 'refs/heads/dev' }}
+      #   run: |
+      #     cd api
+      #     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 778568866635.dkr.ecr.us-east-1.amazonaws.com
+      #     docker build -t dev-api-boilerplate-repository .
+      #     docker tag dev-api-boilerplate-repository:latest 778568866635.dkr.ecr.us-east-1.amazonaws.com/dev-api-boilerplate-repository:latest
+      #     docker push 778568866635.dkr.ecr.us-east-1.amazonaws.com/dev-api-boilerplate-repository:latest
 
-          aws ecs update-service --cluster dev-ecs-boilerplate-cluster --service dev-ecs-api-service --task-definition dev-ecs-api-task-definition --force-new-deployment
+      #     aws ecs update-service --cluster dev-ecs-boilerplate-cluster --service dev-ecs-api-service --task-definition dev-ecs-api-task-definition --force-new-deployment
