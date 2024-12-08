@@ -1,67 +1,34 @@
-## About this project
-   In order to simplify the api development I created this generic boilerplate to improve the first steps of building a containerized api.
-   In this boilerplate you'll find:
-   - Github Actions to create the CI/CD pipeline;
-   - Terraform, Infrastructure as Code to create AWS environment resources;
-   - Docker to create api image;
-   
-## Infrastructure
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/63565773/161129190-a4911398-2cb2-49fe-9b64-24f79e4c5d9a.png" width="500px" />
-</p>
-   - 1 VPC, 2 Public Subnets, 2 Private Subnets, 2 Database Subnets, 1 IGW, 1 NAT;
-   - 1 ECS Cluster, 1 Task Definition, 1 Service with 2 Desired Tasks;
-   - 1 ECR;
-   - 1 ALB, 1 Target Group;
-   - 1 S3 bucket;
-   - 2 DynamoDB Tables;
+## InvestPro IaC with ECS
 
-## Features
-- [X] IaC -> 1 VPC, 2 Public Subnets, 2 Private Subnets, 2 Database Subnets, 1 IGW, 1 NAT
-- [X] IaC -> 1 ECS Cluster, 1 Task Definition, 1 Service with 2 Desired Tasks
-- [X] IaC -> 1 ECR
-- [X] IaC -> 1 ALB, 1 Target Group pointing to service
-- [X] CI/CD -> Update the whole infrastructure when new commit to branch main/dev 
-- [X] CI/CD -> Separate dev & prod environment
-- [X] CI/CD -> Update ECR image, Task Definition and Service
-- [X] Network diagram
+## Build Docker Images and Push to the ECR
 
-
-## How to run
- **1 - Create s3 Bucket**
-    **- Name**: api-boilerplate-terraform-state
-    **- Region**: us-east-1
-    **- Object Ownership**: ACLs disabled
-    **- Block Public Access settings for this bucket**: Block all public access
-    **- Bucket Versioning**: Enabled
-    **- Create Bucket**
-    - Create a "dev" folder
-    - Create a "prod" folder
-
- **2 - Create 2 DynamoDB Table**
-    **- Name**: prod-boilerplate-tfstate
-    **- Partition key**: LockID
-    Leave everything default
-    **- Create Table**
-    ---
-    **- Name**: dev-boilerplate-tfstate
-    **- Partition key**: LockID
-    Leave everything default
-    **- Create Table**
-
- **2- Setup Github Repository Secrets**
-    - AWS_ACCESS_KEY_ID -> aws user access key
-    - AWS_SECRET_ACCESS_KEY -> aws user secret key
-    - TF_API_TOKEN -> terraform account api token
-
- **3- Now you just need to create a new commit on branch main or dev :)**
-
-## Clean up
-```
-   cd scripts
-   chmod +x ./*.sh
-   ./cleanup.sh
+1. Configure your AWS Credentials:
+```sh
+aws configure   
 ```
 
-## Next Steps
-- [ ] Auto release tags
+2. Login to the ECR:
+```sh
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 657608969216.dkr.ecr.us-east-1.amazonaws.com/invest-pro-api
+```
+
+3. Build and Push the Docker Image:
+```sh
+export VERSION="0.0.2"
+export REPOSITORY="657608969216.dkr.ecr.us-east-1.amazonaws.com/invest-pro-api"
+docker build -t invest-pro-api:$VERSION .
+
+docker tag invest-pro-api:$VERSION $REPOSITORY:$VERSION
+docker tag invest-pro-api:$VERSION $REPOSITORY:latest
+
+docker push "$REPOSITORY":"$VERSION"
+docker push "$REPOSITORY":latest
+```
+
+
+## Obtain SSL Certificate
+
+```sh
+sudo yum install -y nginx certbot python-certbot-nginx
+sudo certbot certonly --nginx -d invest-pro-api.brottas.com
+```

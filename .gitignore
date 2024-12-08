@@ -2,6 +2,9 @@ node_modules/
 package-*.json
 .terraform/
 .terraform.lock.hcl
-terraform.tfstate
+terraform.tfstate*
 terraform.tfstate.backup
 .git
+.env
+secret.md
+scripts/
