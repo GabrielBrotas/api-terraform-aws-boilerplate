@@ -28,6 +28,14 @@ resource "aws_security_group" "docker_backend_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # Inbound HTTPS traffic
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # SSH access
   ingress {
     from_port = 22
@@ -134,7 +142,7 @@ resource "aws_instance" "docker_backend" {
     aws ecr get-login-password --region ${local.region} | docker login --username AWS --password-stdin $(aws sts get-caller-identity --query Account --output text).dkr.ecr.${local.region}.amazonaws.com
     
     # Optional: Install additional tools
-    amazon-linux-extras install epel -y
+    yum install amazon-linux-extras install epel -y
     yum install -y git aws-cli certbot-apache nginx certbot python-certbot-nginx
 
     # Reboot to ensure all changes take effect
@@ -157,7 +165,7 @@ resource "aws_instance" "docker_backend" {
 ###########
 resource "aws_route53_record" "docker_backend_dns" {
   zone_id = "Z01896533GTRALFMTN5Q2"
-  name    = "invest-pro-api.brottas.com"
+  name    = "myportfolio-api.brottas.com"
   type    = "A"
   ttl     = 300
   records = [aws_instance.docker_backend.public_ip]
@@ -229,7 +237,7 @@ resource "aws_db_instance" "default" {
   parameter_group_name   = aws_db_parameter_group.custom_pg.name
   skip_final_snapshot    = true
 
-  db_name  = "invest_pro_db"
+  db_name  = "myportfolio"
   password = var.db_password
 
   tags = merge(local.tags, {

@@ -25,10 +25,16 @@ docker push "$REPOSITORY":"$VERSION"
 docker push "$REPOSITORY":latest
 ```
 
+## SSH to the EC2 Instance
+
+```sh
+cd Projects
+ssh -i "gbrotas-keypair.pem" ec2-user@ec2-44-200-153-50.compute-1.amazonaws.com
+```
 
 ## Obtain SSL Certificate
 
 ```sh
 sudo yum install -y nginx certbot python-certbot-nginx
-sudo certbot certonly --nginx -d invest-pro-api.brottas.com
+sudo certbot certonly --nginx -d myportfolio-api.brottas.com
 ```
